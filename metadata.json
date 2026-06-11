@@ -1,0 +1,6 @@
+{
+  "name": "JARVIS AI Voice Assistant",
+  "description": "Premium SaaS landing page for JARVIS Android AI Voice Assistant.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
