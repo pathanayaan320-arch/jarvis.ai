@@ -50,10 +50,15 @@ export default function Hero() {
             
             <div className="flex flex-col sm:flex-row gap-4">
               <button 
-                onClick={() => window.open('https://wa.me/918400815008?text=Hey%2C%20I%20want%20JARVIS%20AI%20Voice%20Assistant%20for%20%E2%82%B9399%20INR.', '_blank')}
+                onClick={() => {
+                  const featuresSection = document.getElementById('features');
+                  if (featuresSection) {
+                    featuresSection.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
                 className="bg-[#3B82F6] text-white px-8 py-4 rounded-xl font-bold transition-transform hover:scale-105 shadow-[0_10px_30px_rgba(59,130,246,0.4)] flex items-center justify-center group text-lg cursor-pointer"
               >
-                Get JARVIS For ₹399
+                Experience JARVIS
                 <motion.span 
                   className="ml-2 group-hover:translate-x-1"
                   transition={{ type: "spring", stiffness: 300 }}

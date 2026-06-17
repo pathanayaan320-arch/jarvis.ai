@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Menu, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -14,7 +15,13 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navLinks = ['Features', 'Demo', 'Pricing', 'FAQ', 'Contact'];
+  const navLinks = [
+    { name: 'Features', path: '/#features' },
+    { name: 'Demo', path: '/#demo' },
+    { name: 'Pricing', path: '/#pricing' },
+    { name: 'FAQ', path: '/#faq' },
+    { name: 'Contact', path: 'https://wa.me/918400815008', external: true }
+  ];
 
   return (
     <motion.nav
@@ -27,38 +34,50 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <div className="flex-shrink-0 cursor-pointer flex items-center gap-2">
+          <Link to="/" className="flex-shrink-0 cursor-pointer flex items-center gap-2">
             <div className="w-8 h-8 bg-gradient-to-tr from-[#3B82F6] to-[#8B5CF6] rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(59,130,246,0.5)]">
               <span className="font-black text-xs text-white">J</span>
             </div>
             <span className="text-xl font-bold tracking-tighter uppercase text-white">
               Jarvis
             </span>
-          </div>
+          </Link>
 
           {/* Desktop Menu */}
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-8 text-[#94A3B8]">
               {navLinks.map((link) => (
-                <a
-                  key={link}
-                  href={`#${link.toLowerCase()}`}
-                  className="hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                >
-                  {link}
-                </a>
+                link.external ? (
+                  <a
+                    key={link.name}
+                    href={link.path}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                  >
+                    {link.name}
+                  </a>
+                ) : (
+                  <Link
+                    key={link.name}
+                    to={link.path}
+                    className="hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                  >
+                    {link.name}
+                  </Link>
+                )
               ))}
             </div>
           </div>
 
           {/* Desktop CTA */}
           <div className="hidden md:block">
-            <button 
-              onClick={() => window.open('https://wa.me/918400815008?text=Hey%2C%20I%20want%20JARVIS%20AI%20Voice%20Assistant%20for%20%E2%82%B9399%20INR.', '_blank')}
-              className="bg-white text-black px-6 py-2 rounded-full text-sm font-bold hover:bg-[#3B82F6] hover:text-white transition-all cursor-pointer"
+            <Link 
+              to="/#features"
+              className="bg-white text-black px-6 py-2 rounded-full text-sm font-bold hover:bg-[#3B82F6] hover:text-white transition-all cursor-pointer inline-block"
             >
-              Get JARVIS For ₹399
-            </button>
+              Features
+            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -84,24 +103,35 @@ export default function Navbar() {
           >
             <div className="px-4 pt-2 pb-6 space-y-1 sm:px-3 text-[#94A3B8]">
               {navLinks.map((link) => (
-                <a
-                  key={link}
-                  href={`#${link.toLowerCase()}`}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="hover:text-white block px-3 py-3 rounded-md text-base font-medium border-b border-white/5"
-                >
-                  {link}
-                </a>
+                link.external ? (
+                  <a
+                    key={link.name}
+                    href={link.path}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="hover:text-white block px-3 py-3 rounded-md text-base font-medium border-b border-white/5"
+                  >
+                    {link.name}
+                  </a>
+                ) : (
+                  <Link
+                    key={link.name}
+                    to={link.path}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="hover:text-white block px-3 py-3 rounded-md text-base font-medium border-b border-white/5"
+                  >
+                    {link.name}
+                  </Link>
+                )
               ))}
-              <button 
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  window.open('https://wa.me/918400815008?text=Hey%2C%20I%20want%20JARVIS%20AI%20Voice%20Assistant%20for%20%E2%82%B9399%20INR.', '_blank');
-                }}
-                className="w-full mt-6 bg-white text-black px-6 py-3 rounded-full font-bold hover:bg-[#3B82F6] hover:text-white transition-all cursor-pointer"
+              <Link 
+                to="/#features"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full mt-6 bg-white text-black px-6 py-3 rounded-full font-bold hover:bg-[#3B82F6] hover:text-white transition-all cursor-pointer block text-center"
               >
-                Get JARVIS For ₹399
-              </button>
+                Features
+              </Link>
             </div>
           </motion.div>
         )}

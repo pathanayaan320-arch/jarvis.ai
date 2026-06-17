@@ -3,22 +3,38 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, useScroll, useSpring } from 'motion/react';
 import Lenis from 'lenis';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 
 import ParticleBackground from './components/ParticleBackground';
 import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import Trust from './components/Trust';
-import Features from './components/Features';
-import HowItWorks from './components/HowItWorks';
-import Screenshots from './components/Screenshots';
-import Pricing from './components/Pricing';
-import Testimonials from './components/Testimonials';
-import FAQ from './components/FAQ';
-import FinalCTA from './components/FinalCTA';
 import Footer from './components/Footer';
+
+import Home from './pages/Home';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import Terms from './pages/Terms';
+
+function ScrollToTop() {
+  const { pathname, hash } = useLocation();
+
+  useEffect(() => {
+    if (hash) {
+      setTimeout(() => {
+        const id = hash.replace('#', '');
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 0);
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [pathname, hash]);
+
+  return null;
+}
 
 function MouseGlow() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -85,25 +101,27 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#050816] text-[#FFFFFF] font-sans selection:bg-[#3B82F6]/30 overflow-x-hidden">
-      <MouseGlow />
-      <ScrollProgress />
-      <ParticleBackground />
-      <div className="relative z-10 w-full flex flex-col">
-        <Navbar />
-        <main>
-          <Hero />
-          <Trust />
-          <Features />
-          <HowItWorks />
-          <Screenshots />
-          <Pricing />
-          <Testimonials />
-          <FAQ />
-          <FinalCTA />
-        </main>
-        <Footer />
+    <BrowserRouter>
+      <ScrollToTop />
+      <div className="min-h-screen bg-[#050816] text-[#FFFFFF] font-sans selection:bg-[#3B82F6]/30 overflow-x-hidden relative flex flex-col">
+        <MouseGlow />
+        <ScrollProgress />
+        <ParticleBackground />
+        
+        <div className="relative z-10 w-full flex flex-col flex-grow">
+          <Navbar />
+          
+          <div className="flex-grow">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/terms" element={<Terms />} />
+            </Routes>
+          </div>
+          
+          <Footer />
+        </div>
       </div>
-    </div>
+    </BrowserRouter>
   );
 }
