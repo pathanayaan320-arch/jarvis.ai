@@ -1,8 +1,11 @@
-import { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'motion/react';
-import { Play } from 'lucide-react';
+import { useRef, useState } from 'react';
+import { motion, useScroll, useTransform, AnimatePresence } from 'motion/react';
+import { Play, X, Info, Layers, Video } from 'lucide-react';
+import InteractiveDemo from './InteractiveDemo';
 
 export default function Hero() {
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+  const [demoModalTab, setDemoModalTab] = useState<'interactive' | 'video'>('interactive');
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -65,7 +68,10 @@ export default function Hero() {
                 >→</motion.span>
               </button>
               
-              <button className="bg-white/5 border border-white/10 hover:bg-white/10 text-white px-8 py-4 rounded-xl font-bold transition-all flex items-center justify-center gap-2 backdrop-blur-sm text-lg cursor-pointer">
+              <button 
+                onClick={() => setIsVideoModalOpen(true)}
+                className="bg-white/5 border border-white/10 hover:bg-white/10 text-white px-8 py-4 rounded-xl font-bold transition-all flex items-center justify-center gap-2 backdrop-blur-sm text-lg cursor-pointer"
+              >
                 <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
                   <Play size={14} className="ml-1 text-white" />
                 </div>
@@ -148,6 +154,91 @@ export default function Hero() {
           </motion.div>
         </div>
       </div>
+
+      {/* Video Demo Modal */}
+      <AnimatePresence>
+        {isVideoModalOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-md overflow-y-auto"
+          >
+            <motion.div 
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="relative w-full max-w-5xl bg-[#0F172A] border border-[#3B82F6]/30 rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(59,130,246,0.4)] my-8"
+            >
+              {/* Header */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between p-6 border-b border-white/10 bg-[#050816]/80 backdrop-blur-md gap-4">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#3B82F6] animate-pulse" />
+                  <h3 className="text-xl font-bold text-white font-display">JARVIS OS System Demo</h3>
+                </div>
+
+                {/* Tab Switcher */}
+                <div className="flex bg-black/40 p-1.5 rounded-xl border border-white/5 shrink-0">
+                  <button
+                    onClick={() => setDemoModalTab('interactive')}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${demoModalTab === 'interactive' ? 'bg-[#3B82F6] text-black shadow-lg' : 'text-[#94A3B8] hover:text-white'}`}
+                  >
+                    <Layers size={14} />
+                    Live Interactive OS Simulator
+                  </button>
+                  <button
+                    onClick={() => setDemoModalTab('video')}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${demoModalTab === 'video' ? 'bg-[#3B82F6] text-black shadow-lg' : 'text-[#94A3B8] hover:text-white'}`}
+                  >
+                    <Video size={14} />
+                    Watch Recorded Video
+                  </button>
+                </div>
+
+                <button 
+                  onClick={() => setIsVideoModalOpen(false)}
+                  className="p-2 rounded-full bg-white/5 hover:bg-white/10 text-[#94A3B8] hover:text-white transition-colors cursor-pointer self-end sm:self-auto"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              {/* Main Content Area */}
+              <div className="bg-[#02040A]">
+                {demoModalTab === 'interactive' ? (
+                  <div className="p-4 sm:p-6 bg-[#050816]/30">
+                    <InteractiveDemo />
+                  </div>
+                ) : (
+                  <div className="relative aspect-video bg-black flex flex-col items-center justify-center">
+                    <video 
+                      src="https://www.image2url.com/r2/default/videos/1782636208826-1302e956-25f0-4646-93a4-e10d3272e3d6.mp4" 
+                      className="w-full h-full object-contain"
+                      controls
+                      autoPlay
+                      loop
+                      playsInline
+                    >
+                      Your browser does not support the video tag.
+                    </video>
+                  </div>
+                )}
+              </div>
+
+              {/* Footer / Info */}
+              <div className="p-4 bg-[#050816]/80 border-t border-white/5 flex items-start gap-2.5 text-xs text-[#94A3B8]">
+                <Info size={16} className="text-[#3B82F6] shrink-0 mt-0.5" />
+                <div>
+                  <p className="leading-relaxed">
+                    <strong>Interactive Demo Engine:</strong> Use the live simulator to trigger custom triggers, toggle active background accessibility services, and hear automated replies. Tap on the <strong>Watch Recorded Video</strong> tab above to view the high-tech promo video in action!
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
