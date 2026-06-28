@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jarvis-ai-g7wf.vercel.app/sitemap.xml
